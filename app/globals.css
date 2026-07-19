@@ -569,6 +569,20 @@ input, select { font-family: inherit; }
   .options-grid { grid-template-columns: 1fr; }
   .browser-viewport { height: 380px; }
   .nav-btn span { display: none; }
+  
+  /* Responsive browser search bar */
+  .browser-chrome {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+  .browser-chrome form {
+    min-width: 100%;
+    order: 10;
+    margin-top: 4px;
+  }
+  .browser-actions {
+    margin-left: auto;
+  }
 }
 
 /* ─── Custom Select / Dropdown ───────────────────────────────── */
