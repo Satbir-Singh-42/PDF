@@ -127,7 +127,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Address bar */}
-                <form onSubmit={e => { e.preventDefault(); navigate(addrInput); }} style={{ flex:1 }}>
+                <form className="browser-form" onSubmit={e => { e.preventDefault(); navigate(addrInput); }}>
                   <div className="browser-address-wrap">
                     {loadedUrl
                       ? isSecure ? <Lock size={12} color="var(--success)"/> : <AlertTriangle size={12} color="var(--danger)"/>
