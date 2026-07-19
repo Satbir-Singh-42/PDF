@@ -625,7 +625,7 @@ input, select { font-family: inherit; }
 /* ─── Print Styles ─────────────────────────────────────────────── */
 @media print {
   /* Hide all UI except the iframe */
-  nav, .hero, .browser-chrome, .options-panel, .bottom-action-bar, footer, .feature-cards, .bg-grid, .bg-blob, .browser-overlay {
+  nav, .hero, .browser-chrome, .options-panel, .bottom-action-bar, footer, .features-section, .bg-grid, .bg-blob, .browser-overlay {
     display: none !important;
   }
   
