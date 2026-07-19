@@ -344,12 +344,12 @@ input, select { font-family: inherit; }
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
   animation: fadeInUp 0.5s ease 0.24s both;
 }
 .browser-chrome {
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
+  border-radius: calc(var(--radius-xl) - 1px) calc(var(--radius-xl) - 1px) 0 0;
   padding: 10px 14px;
   display: flex; align-items: center; gap: 10px;
 }
@@ -621,3 +621,45 @@ input, select { font-family: inherit; }
 .cs-option:hover { background: var(--surface-2); color: var(--text-1); }
 .cs-option.active { color: var(--accent); font-weight: 600; background: var(--accent-soft); }
 .cs-check { color: var(--accent); flex-shrink: 0; }
+
+/* ─── Print Styles ─────────────────────────────────────────────── */
+@media print {
+  /* Hide all UI except the iframe */
+  nav, .hero, .browser-chrome, .options-panel, .bottom-action-bar, footer, .feature-cards, .bg-grid, .bg-blob, .browser-overlay {
+    display: none !important;
+  }
+  
+  body, .app-wrapper, .container, main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    background: transparent !important;
+  }
+  
+  .browser-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  
+  /* Expand viewport to user-selected height to capture full cross-origin page */
+  .browser-viewport {
+    height: var(--print-height, 15000px) !important;
+    overflow: visible !important;
+  }
+  
+  .browser-iframe {
+    width: 100% !important;
+    height: var(--print-height, 15000px) !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
