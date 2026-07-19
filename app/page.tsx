@@ -3,23 +3,12 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Globe, ArrowLeft, ArrowRight, RotateCw, X,
   Lock, AlertTriangle, ArrowUpRight, Search,
-  FileText, Download, CheckCircle, FileWarning,
-  Settings2, ChevronDown, Printer
+  FileText, Printer
 } from "lucide-react";
-import { CustomSelect } from "@/components/CustomSelect";
 import FeatureCards from "@/components/FeatureCards";
 
 /* ── constants ──────────────────────────────────────────────── */
 const BLOCKED = ["localhost", "127.0.0.1", "0.0.0.0", "[::1]"];
-
-// 1 page is roughly 1100px in print
-const LENGTH_OPTS = [
-  { value: 1200, label: "Screen size (1 page)" },
-  { value: 5500, label: "Short (~5 pages)" },
-  { value: 16500, label: "Medium (~15 pages)" },
-  { value: 33000, label: "Long (~30 pages)" },
-  { value: 55000, label: "Extra Long (~50 pages)" },
-];
 
 function isSelf(url: string) {
   try { return BLOCKED.some(b => new URL(url).hostname === b); }
@@ -44,15 +33,6 @@ export default function HomePage() {
   const [history, setHistory]       = useState<string[]>([]);
   const [histIdx, setHistIdx]       = useState(-1);
   const ifrRef = useRef<HTMLIFrameElement>(null);
-
-  /* print options */
-  const [printHeight, setPrintHeight] = useState<number>(16500);
-  const [optsOpen, setOptsOpen] = useState(false);
-  
-  /* Apply CSS variable to document so @media print can pick it up */
-  useEffect(() => {
-    document.documentElement.style.setProperty('--print-height', `${printHeight}px`);
-  }, [printHeight]);
 
   /* ── browser navigation ─────────────────────────────────── */
   const navigate = useCallback((raw: string) => {
@@ -84,10 +64,7 @@ export default function HomePage() {
     const url = loadedUrl.trim();
     if (!url || isSelf(url)) return;
     
-    // Close options panel before printing so it isn't rendered
-    setOptsOpen(false);
-    
-    // Slight delay to allow CSS variable and options panel close to apply
+    // Slight delay to ensure UI updates before print dialog blocks thread
     setTimeout(() => {
       window.print();
     }, 100);
@@ -221,8 +198,8 @@ export default function HomePage() {
               <div className="bottom-action-bar" style={{
                 borderTop:"1px solid var(--border)", background:"var(--surface-2)",
                 padding:"14px 18px", display:"flex", alignItems:"center", gap:12, flexWrap:"wrap",
-                borderBottomLeftRadius: optsOpen ? 0 : "calc(var(--radius-xl) - 1px)",
-                borderBottomRightRadius: optsOpen ? 0 : "calc(var(--radius-xl) - 1px)"
+                borderBottomLeftRadius: "calc(var(--radius-xl) - 1px)",
+                borderBottomRightRadius: "calc(var(--radius-xl) - 1px)"
               }}>
                 {/* URL pill */}
                 {loadedUrl ? (
@@ -237,19 +214,6 @@ export default function HomePage() {
                   </div>
                 )}
 
-                {/* Options toggle */}
-                <button
-                  type="button"
-                  className="icon-btn"
-                  onClick={() => setOptsOpen(o => !o)}
-                  style={{ padding:"8px 14px" }}
-                  aria-expanded={optsOpen}
-                >
-                  <Settings2 size={14}/>
-                  Options
-                  <ChevronDown size={12} style={{ transform: optsOpen ? "rotate(180deg)" : "none", transition:"0.2s" }}/>
-                </button>
-
                 {/* Generate PDF (Native Print) */}
                 <button
                   id="generate-btn"
@@ -261,30 +225,6 @@ export default function HomePage() {
                 >
                   <Printer size={15}/> Generate PDF
                 </button>
-              </div>
-
-              {/* Inline options panel */}
-              <div className={`options-panel ${optsOpen ? "open" : ""}`} style={{ 
-                borderTop: optsOpen ? "1px solid var(--border)" : "none",
-                borderBottomLeftRadius: optsOpen ? "calc(var(--radius-xl) - 1px)" : 0,
-                borderBottomRightRadius: optsOpen ? "calc(var(--radius-xl) - 1px)" : 0,
-                background: "var(--surface-2)"
-              }}>
-                <div className="options-inner" style={{ padding:"16px 18px" }}>
-                  <div className="options-grid" style={{ gridTemplateColumns: "1fr" }}>
-                    <CustomSelect 
-                      id="opt-length"  
-                      label="Document Length (Helps capture full page)"      
-                      options={LENGTH_OPTS}  
-                      value={printHeight}      
-                      onChange={v => setPrintHeight(Number(v))} 
-                    />
-                    <p style={{ fontSize:"0.8rem", color:"var(--text-3)", marginTop: "-8px" }}>
-                      Since we use your device's native PDF generator, we have to artificially expand the page height to capture everything.
-                      Choose a length that roughly matches the article length.
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
 
