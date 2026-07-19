@@ -1,10 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack config (Next.js 16 default bundler)
+  // Turbopack (Next.js 16 default)
   turbopack: {},
 
-  // Server-side externals for Puppeteer native binaries
-  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium-min"],
+  // Keep heavy server-only packages out of the bundle
+  serverExternalPackages: [
+    "puppeteer-core",
+    "puppeteer-extra",
+    "puppeteer-extra-plugin-stealth",
+    "@sparticuz/chromium-min",
+  ],
 };
 
 module.exports = nextConfig;
